@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STORE NGUYỄN LONG</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <button class="btn-menu" onclick="toggleDrawer()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <a href="#" class="navbar-brand" onclick="showPage('home')"><span>STORE </span>NGUYỄN LONG</a>
+  <button class="btn-login-nav" id="nav-login-btn" onclick="showPage('login')">Đăng Nhập</button>
+</nav>
+
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <!-- Đã đăng nhập -->
+  <div id="drawer-auth" style="display:none; flex:1; flex-direction:column;">
+    <div class="drawer-user">
+      <div class="drawer-avatar" id="drawer-avatar">U</div>
+      <div class="drawer-username" id="drawer-username">-</div>
+      <div class="drawer-id" id="drawer-id">Mã KH: -</div>
+    </div>
+    <div class="drawer-balance">
+      <div class="drawer-balance-label">Số dư tài khoản</div>
+      <div class="drawer-balance-amount" id="drawer-balance">0 VND</div>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#" onclick="navTo('home')" style="color:var(--cyan);font-weight:700;">🏠 Trang Chủ</a>
+      <a href="#" onclick="navTo('deposit-atm')">💳 Nạp Tiền ATM</a>
+      <a href="#" onclick="navTo('deposit-card')">📱 Nạp Thẻ Cào</a>
+      <a href="#" onclick="navTo('history-deposit')">📋 Lịch Sử Nạp Tiền</a>
+      <a href="#" onclick="navTo('history-purchase')">🛒 Lịch Sử Mua Hàng</a>
+      <a href="#" id="admin-link" class="admin-link" onclick="navTo('admin')" style="display:none">⚙️ Admin Panel</a>
+    </nav>
+    <div class="drawer-footer">
+      <button class="btn-logout" onclick="doLogout()">Đăng Xuất</button>
+    </div>
+  </div>
+
+  <!-- Chưa đăng nhập -->
+  <div id="drawer-guest" style="flex:1; display:flex; flex-direction:column; justify-content:flex-start;">
+    <nav class="drawer-nav" style="padding-top:16px;">
+      <a href="#" onclick="navTo('home')" style="color:var(--cyan);font-weight:700;">🏠 Trang Chủ</a>
+    </nav>
+    <div class="drawer-guest" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+      <p>Vui lòng đăng nhập để tiếp tục</p>
+      <button class="btn-primary" onclick="navTo('login')">Đăng Nhập</button>
+      <button class="btn-primary" style="background:rgba(255,255,255,0.1);color:#fff;box-shadow:none;margin-top:8px;" onclick="navTo('register')">Đăng Ký</button>
+    </div>
+  </div>
+</div>
+
+<!-- Canvas tuyết rơi toàn trang -->
+<canvas id="snow-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:5;"></canvas>
+
+<!-- ===================== TRANG CHỦ ===================== -->
+<div class="page active" id="page-home">
+  <div class="stars" id="stars"></div>
+  <div class="home-content">
+    <div class="hero">
+      <div class="hero-badge">👑 <span id="hero-email">storenguyenlong@gmail.com</span></div>
+      <h1 class="hero-title"><span>STORE </span><span class="cyan">NGUYỄN LONG</span></h1>
+      <p class="hero-tagline" id="hero-tagline">PROXY &amp; SCRIPT &amp; CONFIG &amp; KEY MENU - FLUORITE - MIGUL_LITE &amp; MMO MẠNG XÃ HỘI</p>
+      <p class="hero-sub" id="hero-sub">Cảm Ơn Bạn Đã Tin Tưởng.</p>
+      <div class="hero-visitors">⚡ <span class="num" id="visitor-count">0</span> Thiết Bị Đã Truy Cập</div>
+    </div>
+
+    <p class="products-title">🔥 BẢNG GIÁ CONFIG &amp; PROXY - MENU - MXH</p>
+    <div class="products-list" id="products-list">
+      <div class="empty-msg">Đang tải sản phẩm...</div>
+    </div>
+
+    <div class="features-section">
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <div class="feature-title">TỐC ĐỘ NHANH CHÓNG</div>
+        <div class="feature-desc">Xử lý yêu cầu 24/7, hoàn thành nhanh chóng chỉ từ 5–30 phút.</div>
+      </div>
+      <div class="feature-card" style="border-color:rgba(0,229,255,0.3);box-shadow:0 0 20px rgba(0,229,255,0.08);">
+        <div class="feature-icon">🛡</div>
+        <div class="feature-title">BẢO MẬT TUYỆT ĐỐI</div>
+        <div class="feature-desc">Cam kết không lưu giữ thông tin khách hàng, bảo mật mọi giao dịch.</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-brand">PHAMHOA<span>.NET</span></div>
+      <div class="footer-sub">© 2026 Bản quyền hệ thống độc quyền</div>
+    </div>
+  </div>
+
+  <div class="floating-btns">
+    <a class="float-btn zalo" id="float-zalo" href="#" target="_blank" title="Zalo">Z</a>
+    <a class="float-btn fb"   id="float-fb"   href="#" target="_blank" title="Facebook">f</a>
+    <button class="float-btn chat" title="Chat ngay" onclick="navTo('deposit-atm')">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===================== ĐĂNG NHẬP ===================== -->
+<div class="page" id="page-login">
+  <div class="auth-page">
+    <div class="auth-card">
+      <h1>Đăng Nhập</h1>
+      <div class="form-group">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="login-username" placeholder="Nhập tên đăng nhập" />
+      </div>
+      <div class="form-group">
+        <div class="label-row">
+          <label>Mật khẩu</label>
+          <span class="forgot">Quên mật khẩu</span>
+        </div>
+        <input type="password" id="login-password" placeholder="Nhập mật khẩu" />
+      </div>
+      <div class="captcha-box">
+        <div class="captcha-left">
+          <input type="checkbox" id="login-captcha" />
+          <label for="login-captcha">Tôi không phải là người máy</label>
+        </div>
+        <div class="captcha-right">
+          <div class="rc">reCAPTCHA</div>
+          <div class="rc-sub">Quyền riêng tư · Điều khoản</div>
+        </div>
+      </div>
+      <div class="auth-error" id="login-error"></div>
+      <button class="btn-submit" id="login-btn" onclick="doLogin()">Đăng Nhập</button>
+      <div class="auth-switch">Chưa có tài khoản? <a onclick="showPage('register')">Đăng ký ngay</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ĐĂNG KÝ ===================== -->
+<div class="page" id="page-register">
+  <div class="auth-page">
+    <div class="auth-card">
+      <h1>Đăng Ký</h1>
+      <div class="form-group">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="reg-username" placeholder="Nhập tên đăng nhập" />
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu</label>
+        <input type="password" id="reg-password" placeholder="Ít nhất 6 ký tự" />
+      </div>
+      <div class="captcha-box">
+        <div class="captcha-left">
+          <input type="checkbox" id="reg-captcha" />
+          <label for="reg-captcha">Tôi không phải là người máy</label>
+        </div>
+        <div class="captcha-right">
+          <div class="rc">reCAPTCHA</div>
+          <div class="rc-sub">Quyền riêng tư · Điều khoản</div>
+        </div>
+      </div>
+      <div class="auth-error" id="reg-error"></div>
+      <button class="btn-submit" id="reg-btn" onclick="doRegister()">Đăng Ký</button>
+      <div class="auth-switch">Đã có tài khoản? <a onclick="showPage('login')">Đăng nhập</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== NẠP TIỀN ATM ===================== -->
+<div class="page" id="page-deposit-atm">
+  <div class="inner-page">
+    <p class="page-title">NẠP TIỀN QUA NGÂN HÀNG</p>
+
+    <div class="info-card">
+      <h3>THÔNG TIN NGÂN HÀNG</h3>
+      <div class="info-row"><span class="info-label">Chủ tài khoản:</span><span class="info-value" id="bank-owner">—</span></div>
+      <div class="info-row"><span class="info-label">Số tài khoản:</span>  <span class="info-value" id="bank-account">—</span></div>
+      <div class="info-row"><span class="info-label">Ngân hàng:</span>     <span class="info-value" id="bank-name">—</span></div>
+      <div class="qr-img" id="qr-container" style="display:none;">
+        <img id="bank-qr" src="" alt="QR Code" />
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>CHỌN SỐ TIỀN NẠP</h3>
+      <div class="amount-grid" id="amount-grid"></div>
+      <div class="selected-amount" id="selected-amount-display" style="display:none;">
+        Số tiền: <span id="amount-text">—</span>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <div class="w-title">⚠️ LƯU Ý QUAN TRỌNG:</div>
+      <div class="w-body" id="deposit-warning">Hãy chuyển khoản trước, sau đó mới nhấn gửi yêu cầu.</div>
+    </div>
+
+    <button class="btn-primary" id="deposit-atm-btn" onclick="submitDepositAtm()">Gửi yêu cầu nạp</button>
+    <p class="btn-note">Tiền sẽ được cộng sau khi admin duyệt</p>
+  </div>
+</div>
+
+<!-- ===================== NẠP THẺ CÀO ===================== -->
+<div class="page" id="page-deposit-card">
+  <div class="inner-page">
+    <p class="page-title">NẠP TIỀN QUA THẺ CÀO</p>
+    <div class="info-card">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <label class="dark-label">Mã thẻ *</label>
+          <input class="dark-input" id="card-code" placeholder="Nhập mã thẻ" />
+        </div>
+        <div>
+          <label class="dark-label">Seri thẻ *</label>
+          <input class="dark-input" id="card-serial" placeholder="Nhập seri thẻ" />
+        </div>
+        <div>
+          <label class="dark-label">Nhà mạng *</label>
+          <select class="dark-select" id="card-carrier">
+            <option value="">— Chọn nhà mạng —</option>
+            <option>Garena</option>
+            <option>Vinaphone</option>
+            <option>Mobifone</option>
+            <option>Viettel</option>
+          </select>
+        </div>
+        <div>
+          <label class="dark-label">Mệnh giá *</label>
+          <select class="dark-select" id="card-denom">
+            <option value="">— Chọn mệnh giá —</option>
+            <option value="20000">20.000đ</option>
+            <option value="50000">50.000đ</option>
+            <option value="100000">100.000đ</option>
+            <option value="200000">200.000đ</option>
+            <option value="500000">500.000đ</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="openCardConfirm()">Gửi thẻ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LỊCH SỬ NẠP ===================== -->
+<div class="page" id="page-history-deposit">
+  <div class="inner-page">
+    <p class="page-title">LỊCH SỬ NẠP TIỀN</p>
+    <div class="history-list" id="history-deposit-list">
+      <div class="empty-msg">Đang tải...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LỊCH SỬ MUA ===================== -->
+<div class="page" id="page-history-purchase">
+  <div class="inner-page">
+    <p class="page-title">LỊCH SỬ MUA HÀNG</p>
+    <div class="history-list" id="history-purchase-list">
+      <div class="empty-msg">Đang tải...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ADMIN ===================== -->
+<div class="page" id="page-admin">
+  <div class="inner-page">
+    <p class="page-title">ADMIN PANEL</p>
+    <p style="text-align:center;font-size:12px;color:var(--gray);margin-bottom:16px;">Chỉ admin mới thấy trang này</p>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('products')">Sản Phẩm</button>
+      <button class="tab-btn"        onclick="switchTab('deposits')">Nạp ATM</button>
+      <button class="tab-btn"        onclick="switchTab('cards')">Thẻ Cào</button>
+      <button class="tab-btn"        onclick="switchTab('users')">Tài Khoản</button>
+      <button class="tab-btn"        onclick="switchTab('settings')">Cài Đặt</button>
+    </div>
+
+    <!-- Tab Sản phẩm -->
+    <div class="admin-section active" id="tab-products">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span class="section-title">Quản lý sản phẩm</span>
+        <button class="btn-add" onclick="toggleAddProduct()">+ Thêm</button>
+      </div>
+      <div id="add-product-form" style="display:none;" class="info-card">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <input class="dark-input" id="np-name"     placeholder="Tên sản phẩm *" />
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <input class="dark-input" id="np-price" type="number" placeholder="Giá bán (VND) *" />
+            <input class="dark-input" id="np-orig"  type="number" placeholder="Giá gốc (nếu sale)" />
+          </div>
+          <label class="checkbox-label">
+            <input type="checkbox" id="np-sale" /> Đang Sale
+          </label>
+          <textarea class="dark-input" id="np-desc"     rows="2" placeholder="Mô tả sản phẩm"></textarea>
+          <textarea class="dark-input" id="np-features" rows="3" placeholder="Tính năng (mỗi dòng 1 tính năng)"></textarea>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-add" onclick="submitAddProduct()">Thêm sản phẩm</button>
+            <button style="padding:10px 14px;border-radius:8px;border:1px solid #555;color:#ccc;background:none;cursor:pointer;" onclick="toggleAddProduct()">Huỷ</button>
+          </div>
+        </div>
+      </div>
+      <div id="admin-products-list"></div>
+    </div>
+
+    <!-- Tab Nạp ATM -->
+    <div class="admin-section" id="tab-deposits">
+      <div class="section-title">Duyệt nạp tiền ATM</div>
+      <div id="admin-deposits-list"></div>
+    </div>
+
+    <!-- Tab Thẻ cào -->
+    <div class="admin-section" id="tab-cards">
+      <div class="section-title">Duyệt thẻ cào</div>
+      <div id="admin-cards-list"></div>
+    </div>
+
+    <!-- Tab Tài khoản -->
+    <div class="admin-section" id="tab-users">
+      <div class="section-title">Cộng tiền theo Mã KH</div>
+      <div class="info-card" style="margin-bottom:16px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <input class="dark-input" id="add-bal-id"     placeholder="Nhập mã khách hàng (VD: KH123ABC)" />
+          <input class="dark-input" id="add-bal-amount" type="number" placeholder="Số tiền (VND)" />
+          <button class="btn-add" onclick="submitAddBalance()">Cộng tiền</button>
+        </div>
+      </div>
+      <div class="section-title" style="font-size:13px;color:var(--gray);margin-bottom:10px;">Danh sách tài khoản</div>
+      <div id="admin-users-list"></div>
+    </div>
+
+    <!-- Tab Cài đặt -->
+    <div class="admin-section" id="tab-settings">
+      <div class="section-title">Cài đặt shop</div>
+      <p style="font-size:11px;color:var(--gray);margin-bottom:16px;">Chỉnh sửa trực tiếp, tự động lưu khi rời ô nhập</p>
+      <div id="settings-form"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+
+<!-- Xác nhận thẻ cào -->
+<div class="modal-overlay" id="card-confirm-modal">
+  <div class="modal warn-modal">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title">LƯU Ý QUAN TRỌNG</div>
+    <div class="modal-warn-box">
+      <p>KIỂM TRA LẠI MÃ THẺ, SERI THẺ VÀ MỆNH GIÁ</p>
+      <p class="red-sub">NẾU SAI MỆNH GIÁ MẤT 50% GIÁ TRỊ</p>
+    </div>
+    <div class="modal-info" id="card-confirm-info"></div>
+    <div class="modal-btns">
+      <button class="btn-confirm" onclick="submitCard()">Xác nhận gửi</button>
+      <button class="btn-cancel"  onclick="closeModal('card-confirm-modal')">Huỷ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mua hàng thành công -->
+<div class="modal-overlay" id="purchase-modal">
+  <div class="modal success-modal">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Mua hàng thành công!</div>
+    <div class="modal-info" id="purchase-modal-info"></div>
+    <a id="purchase-dl-btn" href="#" download style="display:none;" class="modal-dl-btn">⬇️ Tải xuống file sản phẩm</a>
+    <button class="modal-close-btn" onclick="closeModal('purchase-modal')">Đóng</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ===================== SCRIPTS (theo thứ tự) ===================== -->
+<script src="utils.js"></script>   <!-- State, API, Toast, Router, Drawer, Boot -->
+<script src="auth.js"></script>    <!-- Đăng nhập / Đăng ký / Đăng xuất -->
+<script src="shop.js"></script>    <!-- Trang chủ + danh sách + mua hàng -->
+<script src="deposit.js"></script> <!-- Nạp ATM, Thẻ cào, Lịch sử -->
+<script src="admin.js"></script>   <!-- Admin panel -->
+
+</body>
+</html>
