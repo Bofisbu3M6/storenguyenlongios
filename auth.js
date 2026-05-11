@@ -1,3 +1,5 @@
+const API = 'https://e78fb2fb-54ed-4087-a4e0-3aa75e062e06-00-4fbk9e2qdkfv.pike.replit.dev';
+
 async function doLogin() {
   const username = document.getElementById('login-username').value.trim();
   const password = document.getElementById('login-password').value;
